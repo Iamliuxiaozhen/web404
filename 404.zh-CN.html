@@ -1,0 +1,503 @@
+<!doctype html>
+<!-- Copyright (c) 2026 OliverLin. All rights reserved. -->
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>404 | Oliver Lin</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #fafafa;
+        --fg: #09090b;
+        --muted: #52525b;
+        --muted-soft: #71717a;
+        --panel: rgba(255, 255, 255, 0.82);
+        --panel-bar: rgba(244, 244, 245, 0.75);
+        --line: rgba(9, 9, 11, 0.1);
+        --button: #09090b;
+        --button-text: #ffffff;
+        --secondary: rgba(255, 255, 255, 0.7);
+        --secondary-hover: #ffffff;
+        --blue: #1d4ed8;
+        --orange: #c2410c;
+        --shadow: rgba(9, 9, 11, 0.08);
+        --grid: rgba(24, 24, 27, 0.07);
+        --glow-blue: rgba(59, 130, 246, 0.14);
+        --glow-orange: rgba(249, 115, 22, 0.09);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #050505;
+          --fg: #fafafa;
+          --muted: #a1a1aa;
+          --muted-soft: #71717a;
+          --panel: rgba(9, 9, 11, 0.72);
+          --panel-bar: rgba(255, 255, 255, 0.035);
+          --line: rgba(255, 255, 255, 0.09);
+          --button: #09090b;
+          --button-text: #f4f4f5;
+          --secondary: rgba(255, 255, 255, 0.045);
+          --secondary-hover: rgba(255, 255, 255, 0.07);
+          --blue: #93c5fd;
+          --orange: #fdba74;
+          --shadow: rgba(0, 0, 0, 0.3);
+          --grid: rgba(255, 255, 255, 0.055);
+          --glow-blue: rgba(59, 130, 246, 0.16);
+          --glow-orange: rgba(249, 115, 22, 0.1);
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: var(--bg);
+      }
+
+      body {
+        color: var(--fg);
+        font-family:
+          var(--font-geist-sans, system-ui), -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        overflow-x: hidden;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      ::selection {
+        background: #fdba74;
+        color: #09090b;
+      }
+
+      .page {
+        position: relative;
+        isolation: isolate;
+        display: flex;
+        min-height: 100vh;
+        overflow: hidden;
+      }
+
+      .page::before,
+      .page::after {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        content: "";
+      }
+
+      .page::before {
+        background-image:
+          linear-gradient(to right, var(--grid) 1px, transparent 1px),
+          linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+        background-size: 44px 44px;
+      }
+
+      .page::after {
+        background:
+          radial-gradient(circle at 28% 18%, var(--glow-blue), transparent 30%),
+          radial-gradient(circle at 78% 24%, var(--glow-orange), transparent 26%),
+          linear-gradient(
+            to bottom,
+            rgba(250, 250, 250, 0.88),
+            rgba(250, 250, 250, 0.98) 45%,
+            #fafafa
+          );
+      }
+
+      .shell {
+        display: grid;
+        width: 100%;
+        max-width: 80rem;
+        align-items: center;
+        gap: 3.5rem;
+        margin: 0 auto;
+        padding: 4rem 1.5rem;
+      }
+
+      .intro {
+        max-width: 42rem;
+      }
+
+      .eyebrow,
+      .terminal-path,
+      .status-grid {
+        font-family: "SFMono-Regular", "Cascadia Code", "Roboto Mono", Consolas,
+          "Liberation Mono", monospace;
+      }
+
+      .eyebrow {
+        margin: 0;
+        color: var(--muted-soft);
+        font-size: 0.75rem;
+        letter-spacing: 0.18em;
+        line-height: 1rem;
+        text-transform: uppercase;
+      }
+
+      .code {
+        margin: 2rem 0 0;
+        color: var(--fg);
+        font-family: "SFMono-Regular", "Cascadia Code", "Roboto Mono", Consolas,
+          "Liberation Mono", monospace;
+        font-size: clamp(6rem, 18vw, 13rem);
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 1;
+      }
+
+      .copy {
+        max-width: 36rem;
+        margin-top: 2rem;
+      }
+
+      .copy h1 {
+        margin: 0;
+        color: var(--fg);
+        font-size: 1.875rem;
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 2.25rem;
+      }
+
+      .copy p {
+        margin: 1.25rem 0 0;
+        color: var(--muted);
+        font-size: 1rem;
+        line-height: 1.75rem;
+      }
+
+      .actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: 2.25rem;
+      }
+
+      .button {
+        display: inline-flex;
+        min-height: 2.75rem;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(9, 9, 11, 0.1);
+        border-radius: 0.375rem;
+        padding: 0.65rem 1.25rem;
+        box-shadow: 0 1px 2px rgba(9, 9, 11, 0.1);
+        font-size: 0.875rem;
+        font-weight: 500;
+        line-height: 1.25rem;
+        transition:
+          transform 200ms ease,
+          background 200ms ease,
+          border-color 200ms ease,
+          color 200ms ease;
+      }
+
+      .button:hover {
+        transform: translateY(-0.125rem);
+      }
+
+      .button:focus-visible {
+        outline: 2px solid rgba(9, 9, 11, 0.2);
+        outline-offset: 3px;
+      }
+
+      .button-primary {
+        background: var(--button);
+        color: var(--button-text);
+      }
+
+      .button-primary:hover {
+        background: #27272a;
+      }
+
+      .button-secondary {
+        background: var(--secondary);
+        color: var(--fg);
+        box-shadow: 0 1px 2px rgba(9, 9, 11, 0.03);
+      }
+
+      .button-secondary:hover {
+        border-color: rgba(9, 9, 11, 0.2);
+        background: var(--secondary-hover);
+      }
+
+      .terminal-wrap {
+        position: relative;
+      }
+
+      .terminal-wrap::before {
+        position: absolute;
+        inset: -1.5rem;
+        z-index: -1;
+        content: "";
+        background: radial-gradient(
+          circle at 50% 45%,
+          var(--glow-blue),
+          transparent 56%
+        );
+        filter: blur(2rem);
+      }
+
+      .terminal {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 0.5rem;
+        background: var(--panel);
+        box-shadow: 0 25px 50px -12px var(--shadow);
+        backdrop-filter: blur(12px);
+      }
+
+      .terminal-header {
+        display: flex;
+        height: 2.75rem;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--line);
+        background: var(--panel-bar);
+        padding: 0 1rem;
+      }
+
+      .lights {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .light {
+        width: 0.625rem;
+        height: 0.625rem;
+        border-radius: 999px;
+      }
+
+      .red {
+        background: rgba(248, 113, 113, 0.8);
+      }
+
+      .yellow {
+        background: rgba(250, 204, 21, 0.8);
+      }
+
+      .green {
+        background: rgba(74, 222, 128, 0.8);
+      }
+
+      .terminal-path {
+        color: var(--muted-soft);
+        font-size: 0.75rem;
+        line-height: 1rem;
+      }
+
+      .terminal-body {
+        padding: 1.25rem 1rem;
+      }
+
+      .terminal pre {
+        margin: 0;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
+        font-family: "SFMono-Regular", "Cascadia Code", "Roboto Mono", Consolas,
+          "Liberation Mono", monospace;
+        font-size: 0.8125rem;
+        line-height: 1.75rem;
+      }
+
+      .terminal-line {
+        display: block;
+      }
+
+      .command {
+        color: var(--fg);
+      }
+
+      .response {
+        color: var(--blue);
+      }
+
+      .error {
+        color: var(--orange);
+      }
+
+      .muted {
+        color: var(--muted-soft);
+      }
+
+      .space {
+        display: block;
+        height: 0.75rem;
+      }
+
+      .status-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.75rem;
+        margin-top: 1rem;
+        color: var(--muted-soft);
+        font-size: 0.6875rem;
+        line-height: 1rem;
+      }
+
+      .status-grid div {
+        border: 1px solid var(--line);
+        border-radius: 0.375rem;
+        background: rgba(255, 255, 255, 0.5);
+        padding: 0.5rem 0.75rem;
+      }
+
+      @media (min-width: 640px) {
+        .copy h1 {
+          font-size: 2.25rem;
+          line-height: 2.5rem;
+        }
+
+        .copy p {
+          font-size: 1.125rem;
+        }
+
+        .actions {
+          flex-direction: row;
+        }
+
+        .terminal-body {
+          padding: 1.5rem;
+        }
+
+        .terminal pre {
+          font-size: 0.875rem;
+        }
+      }
+
+      @media (min-width: 768px) {
+        .shell {
+          padding-right: 2rem;
+          padding-left: 2rem;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .shell {
+          min-height: 100vh;
+          grid-template-columns: 0.9fr 1.1fr;
+          gap: 5rem;
+          padding: 6rem 2.5rem;
+        }
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .page::after {
+          background:
+            radial-gradient(circle at 28% 18%, var(--glow-blue), transparent 30%),
+            radial-gradient(circle at 78% 24%, var(--glow-orange), transparent 26%),
+            linear-gradient(
+              to bottom,
+              rgba(5, 5, 5, 0.72),
+              rgba(5, 5, 5, 0.94) 42%,
+              #050505
+            );
+        }
+
+        .button {
+          border-color: rgba(255, 255, 255, 0.14);
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .button:focus-visible {
+          outline-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .button-primary:hover {
+          border-color: rgba(255, 255, 255, 0.25);
+          background: #18181b;
+          color: #ffffff;
+        }
+
+        .button-secondary {
+          color: #e4e4e7;
+          border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .button-secondary:hover {
+          border-color: rgba(255, 255, 255, 0.2);
+          color: #ffffff;
+        }
+
+        .status-grid div {
+          background: rgba(255, 255, 255, 0.035);
+        }
+      }
+
+      @media (max-width: 520px) {
+        .status-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .terminal-path {
+          max-width: 55%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="shell" aria-labelledby="page-title">
+        <div class="intro">
+          <p class="eyebrow">liuxiaozhen.dev / not-found</p>
+          <p class="code" aria-hidden="true">404</p>
+          <div class="copy">
+            <h1 id="page-title">页面似乎走丢了</h1>
+            <p>
+              你访问的页面不存在、已被移动，或者从未存在过。
+            </p>
+          </div>
+
+          <div class="actions" aria-label="导航操作">
+            <a class="button button-primary" href="/zh-CN">返回首页</a>
+            <a
+              class="button button-secondary"
+              href="https://github.com/Iamliuxiaozhen"
+              target="_blank"
+              rel="noreferrer"
+            >
+              前往 GitHub
+            </a>
+          </div>
+        </div>
+
+        <div class="terminal-wrap" aria-label="404 诊断终端">
+          <div class="terminal">
+            <div class="terminal-header">
+              <div class="lights" aria-hidden="true">
+                <span class="light red"></span>
+                <span class="light yellow"></span>
+                <span class="light green"></span>
+              </div>
+              <span class="terminal-path">~/oliver/site</span>
+            </div>
+            <div class="terminal-body">
+              <pre><span class="terminal-line command">$ curl https://liuxiaozhen.dev/this-page</span><span class="terminal-line response">HTTP/2 404</span><span class="terminal-line error">error: page not found</span><span class="space" aria-hidden="true"></span><span class="terminal-line command">$ git log --follow page</span><span class="terminal-line error">fatal: path not found</span><span class="space" aria-hidden="true"></span><span class="terminal-line command">$ sudo find / -name page</span><span class="terminal-line muted">Permission denied</span></pre>
+            </div>
+          </div>
+          <div class="status-grid" aria-label="页面状态">
+            <div>route: missing</div>
+            <div>status: 404</div>
+            <div>owner: Oliver</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
